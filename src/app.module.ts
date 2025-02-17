@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [LoggerModule.forRootAsync({
@@ -29,7 +30,7 @@ import { LoggerModule } from 'nestjs-pino';
     ConfigModule.forRoot({
     envFilePath : './.env',
     isGlobal : true
-  }),UsersModule],
+  }),UsersModule, PrismaModule],
   controllers: [AppController],
   providers: [AppService],
 })
