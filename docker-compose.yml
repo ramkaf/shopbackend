@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    environment:
+      POSTGRES_USER: ramkaf
+      POSTGRES_PASSWORD: 321165ram
+      POSTGRES_DB: shop
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"
+    restart: always
+
+volumes:
+  postgres_data:
+    driver: local
