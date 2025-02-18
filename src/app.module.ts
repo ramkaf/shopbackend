@@ -5,32 +5,40 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [LoggerModule.forRootAsync({
-    imports : [ConfigModule],
-    useFactory:(configservice:ConfigService) => {
-      const isProduction = configservice.getOrThrow('NODE_ENV') === 'production'
-      return {
-        pinoHttp : {
-          transport : isProduction ? undefined : {
-            target : 'pino-pretty',
-            options : {
-              singleLine : true
-            }
+  imports: [
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configservice: ConfigService) => {
+        const isProduction =
+          configservice.getOrThrow('NODE_ENV') === 'production';
+        return {
+          pinoHttp: {
+            transport: isProduction
+              ? undefined
+              : {
+                  target: 'pino-pretty',
+                  options: {
+                    singleLine: true,
+                  },
+                },
+            level: isProduction ? 'info' : 'debug',
           },
-          level : isProduction ? 'info' : 'debug'
-        }
-      }
-    },
-    inject : [ConfigService]
-  }
-  
-  ),
+        };
+      },
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
-    envFilePath : './.env',
-    isGlobal : true
-  }),UsersModule, PrismaModule],
+      envFilePath: './.env',
+      isGlobal: true,
+    }),
+    UsersModule,
+    PrismaModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -5,14 +5,15 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
-  app.useLogger(app.get(Logger))
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist : true
-  }))
-  const PORT = app.get(ConfigService).getOrThrow('PORT')
+  const app = await NestFactory.create(AppModule);
+  app.useLogger(app.get(Logger));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
+  const PORT = app.get(ConfigService).getOrThrow('PORT');
   await app.listen(PORT);
   console.log(`app successfully running on port ${PORT}`);
-  
 }
 bootstrap();
